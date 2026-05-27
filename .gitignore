@@ -1,0 +1,14 @@
+# 忽略编译生成的可执行文件
+*.exe
+*.out
+*.o
+*.obj
+
+# 忽略调试文件
+*.pdb
+*.ilk
+*.idb
+
+# 忽略系统文件
+Thumbs.db
+.DS_Store
