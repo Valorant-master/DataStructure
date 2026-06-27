@@ -55,27 +55,77 @@ void Insert(BST** rootPtr,int data){
 
 
 }
+int FindMin(BST* root){
+    if(root==NULL){
+        printf("tree is empty");
+        return -1;
+    }
+    //普通版
+    // else if(root->left==NULL){
+    //     return root->data;
+    // }else
+    // {
+    //     while (root->left!=NULL)
+    //     {
+    //         root=root->left;
+    //     }
+    //     return root->data;
+    // }
+    //递归实现
+    else{
+        if(root->left==NULL){
+            return root->data;
+        }
+    }
+    return FindMin(root->left);
+}
+
+int FindMax(BST* root){
+    if(root==NULL){
+        return -1;
+    }
+    else{
+        while (root->right==NULL)
+        {
+            return root->data;
+        }
+    }
+    return FindMax(root->right);
+}
 bool Search(BST* root,int x){
     BST* temp=root;
     //普通版
-    while(temp!=NULL){
-        if(temp->data==x)
-            return true;
-        else if(x<temp->data){
-            temp=temp->left;
-        }else{
-            temp=temp->right;
-        }
-    }
-    return false;
+    // while(temp!=NULL){
+    //     if(temp->data==x)
+    //         return true;
+    //     else if(x<temp->data){
+    //         temp=temp->left;
+    //     }else{
+    //         temp=temp->right;
+    //     }
+    // }
+    // return false;
     
     //递归版
+    if(root==NULL){
+        return false;
+    }else if(x==root->data){
+        return true;
+    }
+    else if (x<root->data)
+    {
+        return Search(root->left,x);
+    }else if (x>root->data)
+    {   
+        return Search(root->right,x);
+    }
+    return false;
 
 }
 int main(){
     BST* root=NULL;
     BST** rootPtr=&root;
-    Insert(rootPtr,1);
+    Insert(rootPtr,9);
     Insert(rootPtr,2);
     Insert(rootPtr,5);
     Insert(rootPtr,3);
@@ -85,9 +135,12 @@ int main(){
     // root=Insert(root,8);
     // root=Insert(root,6);
     if(Search(root,5)){
-        printf("find");
+        printf("find\n");
     }else{
-        printf("wrong");
+        printf("wrong\n");
     }
-
+    printf("Min= ");
+    printf("%d\n",FindMin(root));
+    printf("Max= ");
+    printf("%d\n",FindMax(root));
 }
