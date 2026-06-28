@@ -1,6 +1,9 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<stdbool.h>
+
+#define MAX(a,b) ((a) > (b) ? (a) : (b))
+
 typedef struct BinarySearchTree
 {
     int data;
@@ -122,6 +125,14 @@ bool Search(BST* root,int x){
     return false;
 
 }
+
+//查树的高度
+int FindHeight(BST* root){
+    if(root==NULL){
+        return -1;
+    }
+    return MAX(FindHeight(root->left),FindHeight(root->right))+1;
+}
 int main(){
     BST* root=NULL;
     BST** rootPtr=&root;
@@ -129,6 +140,9 @@ int main(){
     Insert(rootPtr,2);
     Insert(rootPtr,5);
     Insert(rootPtr,3);
+    Insert(rootPtr,4);
+    Insert(rootPtr,1);
+    Insert(rootPtr,7);
     // root=Insert(root,1);
     // root=Insert(root,2);
     // root=Insert(root,5);
@@ -143,4 +157,5 @@ int main(){
     printf("%d\n",FindMin(root));
     printf("Max= ");
     printf("%d\n",FindMax(root));
+    printf("%d ",FindHeight(root));
 }
