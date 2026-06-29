@@ -17,7 +17,7 @@ typedef struct Node{
 //     }
 //     *top=prev;
 // }
-
+//需要重写
 typedef struct addressStack{
     StackNode* top;
     struct addressStack* next;

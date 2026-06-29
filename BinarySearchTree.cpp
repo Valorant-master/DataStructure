@@ -11,6 +11,85 @@ typedef struct BinarySearchTree
     struct BinarySearchTree* right;
 }BST;
 
+typedef struct QueueNode
+{   
+    BST* treeNode;
+    struct QueueNode* next;
+}QueueNode;
+
+typedef struct Queue{
+    QueueNode* front;
+    QueueNode* rear;
+}Queue;
+
+void InitQueue(Queue* q){
+    q->front=NULL;
+    q->rear=NULL;
+}
+
+bool IsEmpty(Queue* q){
+    // if(q->front==NULL){
+    //     return true;
+    // }else{
+    //     return false;
+    // }
+    return q->front==NULL;
+}
+void EnQueue(BST* treeNode,Queue* q){
+    QueueNode* newNode=(QueueNode*)malloc(sizeof(QueueNode));
+    newNode->treeNode=treeNode;
+    newNode->next=NULL;
+    if(IsEmpty(q)){
+        q->front=newNode;
+        q->rear=newNode;
+    }else{
+        q->rear->next=newNode;
+        q->rear=newNode;
+    }
+}
+
+BST* DeQueue(Queue* q){
+     if (IsEmpty(q))
+        return NULL;
+
+    QueueNode* temp = q->front; // 暂存队头
+    BST* res = temp->treeNode; // 取出树节点
+    q->front = q->front->next; // 队头后移
+    free(temp); // 释放旧队列节点
+
+    // 如果队头变空，同步置尾为空
+    if (q->front == NULL)
+        q->rear = NULL;
+
+    return res;
+}
+
+//Level Order Traversal
+void LevelOrder(BST* root){
+    if(root==NULL){
+        printf("tree is NULL");
+    }
+
+    Queue q;
+    InitQueue(&q);
+    EnQueue(root, &q); // 根节点先入队
+
+    while (!IsEmpty(&q))
+    {
+        // 取出队首节点
+        BST* cur = DeQueue(&q);
+        printf("%d ", cur->data); // 访问当前节点
+
+        // 左子树不为空，入队
+        if (cur->left != NULL)
+            EnQueue(cur->left, &q);
+        // 右子树不为空，入队
+        if (cur->right != NULL)
+            EnQueue(cur->right, &q);
+    }
+}
+
+
 //1、根节点为全局变量
 // BST* root=NULL;
 //GetNewNode
@@ -157,5 +236,9 @@ int main(){
     printf("%d\n",FindMin(root));
     printf("Max= ");
     printf("%d\n",FindMax(root));
-    printf("%d ",FindHeight(root));
+    printf("%d \n",FindHeight(root));
+
+    printf("层序遍历结果：");
+    LevelOrder(root);
+    return 0;
 }
