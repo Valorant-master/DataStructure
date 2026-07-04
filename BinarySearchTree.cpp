@@ -64,30 +64,7 @@ BST* DeQueue(Queue* q){
     return res;
 }
 
-//Level Order Traversal
-void LevelOrder(BST* root){
-    if(root==NULL){
-        printf("tree is NULL");
-    }
 
-    Queue q;
-    InitQueue(&q);
-    EnQueue(root, &q); // 根节点先入队
-
-    while (!IsEmpty(&q))
-    {
-        // 取出队首节点
-        BST* cur = DeQueue(&q);
-        printf("%d ", cur->data); // 访问当前节点
-
-        // 左子树不为空，入队
-        if (cur->left != NULL)
-            EnQueue(cur->left, &q);
-        // 右子树不为空，入队
-        if (cur->right != NULL)
-            EnQueue(cur->right, &q);
-    }
-}
 
 
 //1、根节点为全局变量
@@ -212,13 +189,73 @@ int FindHeight(BST* root){
     }
     return MAX(FindHeight(root->left),FindHeight(root->right))+1;
 }
+//Binary Search Tree Traversal
+
+//Breadth first
+//Level Order Traversal 
+void LevelOrder(BST* root){
+    if(root==NULL){
+        printf("tree is NULL");
+    }
+
+    Queue q;
+    InitQueue(&q);
+    EnQueue(root, &q); // 根节点先入队
+
+    while (!IsEmpty(&q))
+    {
+        // 取出队首节点
+        BST* cur = DeQueue(&q);
+        printf("%d ", cur->data); // 访问当前节点
+
+        // 左子树不为空，入队
+        if (cur->left != NULL)
+            EnQueue(cur->left, &q);
+        // 右子树不为空，入队
+        if (cur->right != NULL)
+            EnQueue(cur->right, &q);
+    }
+}
+
+//Depth first
+//PreOrder InOrder PostOrder
+void PreOrder(BST* root){
+    if(root==NULL){
+        return ;
+    }
+    printf("%d ",root->data);
+    PreOrder(root->left);
+    PreOrder(root->right);
+    
+}
+void InOrder(BST* root){
+    if(root==NULL){
+        return ;
+    }
+    InOrder(root->left);
+    printf("%d ",root->data);
+    InOrder(root->right);
+    
+}
+void PostOrder(BST* root){
+    if(root==NULL){
+        return ;
+    }
+    PostOrder(root->left);
+    PostOrder(root->right);
+    printf("%d ",root->data);
+
+    
+}
 int main(){
     BST* root=NULL;
     BST** rootPtr=&root;
     Insert(rootPtr,9);
     Insert(rootPtr,2);
     Insert(rootPtr,5);
-    Insert(rootPtr,3);
+    Insert(rootPtr,11);
+    Insert(rootPtr,15);
+    Insert(rootPtr,13);
     Insert(rootPtr,4);
     Insert(rootPtr,1);
     Insert(rootPtr,7);
@@ -240,5 +277,11 @@ int main(){
 
     printf("层序遍历结果：");
     LevelOrder(root);
+    printf("先序遍历结果");
+    PreOrder(root);
+    printf("中序遍历结果");
+    InOrder(root);
+    printf("后序遍历");
+    PostOrder(root);
     return 0;
 }
