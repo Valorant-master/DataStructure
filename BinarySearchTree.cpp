@@ -1,9 +1,10 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<stdbool.h>
-
+#include<limits.h>
 #define MAX(a,b) ((a) > (b) ? (a) : (b))
-
+#define Max INT_MAX
+#define Min INT_MIN
 typedef struct BinarySearchTree
 {
     int data;
@@ -228,14 +229,20 @@ void PreOrder(BST* root){
     PreOrder(root->right);
     
 }
-void InOrder(BST* root){
+
+//直接在中序遍历中检查是否是升序排列
+void InOrder(BST* root,int min){
     if(root==NULL){
         return ;
     }
-    InOrder(root->left);
+    InOrder(root->left,min);
+    if(min<root->data||min==root->data){
+        min=root->data;
+    }else{
+        printf("中序遍历不是递增排列，不是二叉排序树");
+    }
     printf("%d ",root->data);
-    InOrder(root->right);
-    
+    InOrder(root->right,min);
 }
 void PostOrder(BST* root){
     if(root==NULL){
@@ -247,6 +254,26 @@ void PostOrder(BST* root){
 
     
 }
+
+//check is binary search tree
+bool IsBST(BST* root,int Max_Val,int Min_Val){
+    if(root==NULL){
+        return true;
+    }
+    if(root->data>Min_Val&&root->data<Max_Val
+        &&IsBST(root->left,root->data,Min_Val)
+        &&IsBST(root->right,Max_Val,root->data)
+    ){
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+// //方法2：遍历中序遍历，检查是否是升序排列
+// bool IsBST2(BST* root){
+
+// }
 int main(){
     BST* root=NULL;
     BST** rootPtr=&root;
@@ -277,11 +304,20 @@ int main(){
 
     printf("层序遍历结果：");
     LevelOrder(root);
+    printf("\n");
     printf("先序遍历结果");
     PreOrder(root);
+    printf("\n");
     printf("中序遍历结果");
-    InOrder(root);
+    InOrder(root,Min);
+    printf("\n");
     printf("后序遍历");
     PostOrder(root);
+    printf("\n");
+    if(IsBST(root,Max,Min)){
+        printf("is BST\n");
+    }else{
+        printf("not a BST\n");
+    }
     return 0;
 }
