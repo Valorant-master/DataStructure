@@ -115,10 +115,10 @@ void Insert(BST** rootPtr,int data){
 
 
 }
-int FindMin(BST* root){
+BST* FindMin(BST* root){
     if(root==NULL){
         printf("tree is empty");
-        return -1;
+        return root;
     }
     //普通版
     // else if(root->left==NULL){
@@ -134,7 +134,7 @@ int FindMin(BST* root){
     //递归实现
     else{
         if(root->left==NULL){
-            return root->data;
+            return root;
         }
     }
     return FindMin(root->left);
@@ -270,10 +270,55 @@ bool IsBST(BST* root,int Max_Val,int Min_Val){
         return false;
     }
 }
-// //方法2：遍历中序遍历，检查是否是升序排列
-// bool IsBST2(BST* root){
 
-// }
+//删除结点
+//三种情况
+//1、被删除结点为叶结点，没有左右孩子可以直接删除
+//2、被删除结点只有左孩子或只有右孩子，让当前结点的前驱指向结点的孩子，然后删除当前结点
+//3、被删除节点有左右孩子，找右子树中的最小值代替（或者左子树中的最大值），
+//                                  情况会转为1或2，然后在删除替代结点右子树中的重复结点。
+BST* Delete(BST* root,int data){
+    if(root==NULL){
+        return root;
+    }
+    else if(root->data>data){
+        root->left=Delete(root->left,data);
+    }
+    else if(root->data<data){
+        root->right=Delete(root->right,data);
+    }
+    //1 没有孩子
+    else if(root->left==NULL&&root->right==NULL){
+        free(root);
+        root=NULL;
+        return root;
+    }
+    //2 只有左或右孩子
+    else if(root->left!=NULL&&root->right==NULL){
+        BST* temp=root;
+        root=root->left;
+        free(temp);
+        return root;
+    }
+    else if(root->right!=NULL&&root->left==NULL){
+        BST* temp=root;
+        root=root->right;
+        free(temp);
+        return root;
+    }
+    //3 左右孩子都有
+    else if(root->left!=NULL&&root->right!=NULL){
+        BST* temp=FindMin(root->right);
+        root->data=temp->data;
+        root->right=Delete(root->right,temp->data);
+        return root;
+    }
+    return root;
+
+}
+
+
+
 int main(){
     BST* root=NULL;
     BST** rootPtr=&root;
@@ -286,38 +331,42 @@ int main(){
     Insert(rootPtr,4);
     Insert(rootPtr,1);
     Insert(rootPtr,7);
+    printf("中序遍历结果");
+    InOrder(root,Min);
+    Delete(root,7);
+    printf("中序遍历结果");
+    InOrder(root,Min);
     // root=Insert(root,1);
     // root=Insert(root,2);
     // root=Insert(root,5);
     // root=Insert(root,8);
     // root=Insert(root,6);
-    if(Search(root,5)){
-        printf("find\n");
-    }else{
-        printf("wrong\n");
-    }
-    printf("Min= ");
-    printf("%d\n",FindMin(root));
-    printf("Max= ");
-    printf("%d\n",FindMax(root));
-    printf("%d \n",FindHeight(root));
+    // if(Search(root,5)){
+    //     printf("find\n");
+    // }else{
+    //     printf("wrong\n");
+    // }
+    // printf("Min= ");
+    // printf("%d\n",FindMin(root));
+    // printf("Max= ");
+    // printf("%d\n",FindMax(root));
+    // printf("%d \n",FindHeight(root));
 
-    printf("层序遍历结果：");
-    LevelOrder(root);
-    printf("\n");
-    printf("先序遍历结果");
-    PreOrder(root);
-    printf("\n");
-    printf("中序遍历结果");
-    InOrder(root,Min);
-    printf("\n");
-    printf("后序遍历");
-    PostOrder(root);
-    printf("\n");
-    if(IsBST(root,Max,Min)){
-        printf("is BST\n");
-    }else{
-        printf("not a BST\n");
-    }
+    // printf("层序遍历结果：");
+    // LevelOrder(root);
+    // printf("\n");
+    // printf("先序遍历结果");
+    // PreOrder(root);
+    // printf("\n");
+    
+    // printf("\n");
+    // printf("后序遍历");
+    // PostOrder(root);
+    // printf("\n");
+    // if(IsBST(root,Max,Min)){
+    //     printf("is BST\n");
+    // }else{
+    //     printf("not a BST\n");
+    // }
     return 0;
 }
