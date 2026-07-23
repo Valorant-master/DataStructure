@@ -1,124 +1,75 @@
 #include<stdio.h>
+#include<stdbool.h>
 #include<stdlib.h>
-typedef struct Node{
+typedef struct ListStack{
     int data;
-    struct Node* next;
-}StackNode;
-// //double pointer example
-// // void ReverseStack(StackNode** top){
-// //     StackNode* prev=NULL;
-// //     StackNode* current=*top;
-// //     StackNode* next=NULL;
-// //     while(current!=NULL){
-// //         next=current->next;
-// //         current->next=prev;
-// //         prev=current;
-// //         current=next;
-// //     }
-// //     *top=prev;
-// // }
-// //需要重写
-// typedef struct addressStack{
-//     StackNode* top;
-//     struct addressStack* next;
-// }addressStack;
+    struct ListStack* next;
+}ListStack;
 
-// void addressPush(addressStack** ads,StackNode* top){
-//     StackNode* temp=top;
-//     while(temp!=NULL){
-//         addressStack* newNode=(addressStack*)malloc(sizeof(addressStack));
-//         newNode->top=temp;
-//         newNode->next=*ads;
-//         *ads=newNode;
-//         temp=temp->next;
-//     }
-// }
+void Init(ListStack** Top){
+    (*Top)=NULL;
+}
 
-// void addressPop(addressStack** ads,StackNode** t){
-//     addressStack* temp=*ads;
-//     *t=temp->top;
-//     *ads=(*ads)->next;
-//     free(temp);
-//     StackNode* currNode=*t;
-//     while(*ads!=NULL){
-//         addressStack* nextAddr=*ads;
-//         currNode->next=nextAddr->top;
-//         currNode=currNode->next;
-//         *ads=(*ads)->next;
-//         free(nextAddr);
-        
-        
-//     }
-    
-//     currNode->next=NULL;
-// }
- 
+bool ISEmpty(ListStack** Top){
+    if((*Top)==NULL){
+        return true;
+    }else {
+        return false;
+    }
+}
 
+void Push(int x,ListStack** Top){
+    ListStack* newNode=(ListStack*)malloc(sizeof(ListStack));
+    newNode->next=(*Top);
+    newNode->data=x;
+    (*Top)=newNode;
+}
 
+int Pop(ListStack** Top){
+    if((*Top)==NULL){
+        return -1;
+    }
+    int t=(*Top)->data;
+    ListStack* temp=(*Top);
+    (*Top)=(*Top)->next;
+    free(temp);
+    temp=NULL;
+    return t;
+}
+int GetTop(ListStack* LST){
+    return LST->data;
+}
 
-// void push(StackNode** t ,int x){
-//     StackNode* newNode=(StackNode*)malloc(sizeof(StackNode));
-//     newNode->data=x;
-//     newNode->next=*t;
-//     *t=newNode;
-// }
+void Traverse(ListStack* LST){
+    ListStack* temp=LST;
+    while(temp!=NULL){
+        printf("%d",temp->data);
+        temp=temp->next;
+    }
+}
 
-
-// int pop(StackNode** t){
-//     if(*t==NULL){
-//         printf("Stack is empty\n");
-//         return -1;
-//     }
-//     StackNode* temp=*t;
-//     int data=temp->data;
-//     *t=(*t)->next;
-//     free(temp);
-
-// }
-// int top(StackNode* top){
-//     if(top==NULL){
-//         printf("Stack is empty\n");
-//         return -1;
-//     }
-//     return top->data;
-// }
-
-// void display(StackNode* top){
-//     if(top==NULL){
-//         printf("Stack is empty\n");
-//         return;
-//     }
-//     StackNode* temp=top;
-//     while(temp!=NULL){
-//         printf("%d ",temp->data);
-//         temp=temp->next;
-//     }
-//     printf("\n");
-// }
-
-// int main(){
-
-//     StackNode* top=NULL;
-//     StackNode** t=&top;
-//     addressStack* addresstop=NULL;
-//     addressStack** ads=&addresstop;
-//     push(t,10);
-//     push(t,9);
-//     push(t,8);
-//     push(t,7);
-//     pop(t);
-//     push(t,6);
-//     display(top);
-//     addressPush(ads,top);
-//     addressPop(ads,t);
-//     //Reverse(an,t);
-//     display(top);
-// }
-
-// //double pointer example
-// // int a=9;
-//     // int* p=&a;
-//     // int** pp=&p;
-//     // printf("%p\n",a);
-//     // printf("%p\n",*p);
-//     // printf("%p\n",**pp);
+void DestroyStack(ListStack** Top){
+    ListStack* temp=(*Top);
+    while((*Top)!=NULL){
+        (*Top)=(*Top)->next;
+        free(temp);
+        temp=(*Top);
+    }
+    temp=NULL;
+}
+int main(){
+    ListStack* LST;
+    ListStack** Top=&LST;
+    Init(Top);
+    Push(1,Top);
+    Push(4,Top);
+    Push(3,Top);
+    Push(2,Top);
+    printf("%d\n",Pop(Top));
+    printf("%d\n",GetTop(LST));
+    Traverse(LST);
+    DestroyStack(Top);
+    if(ISEmpty){
+        printf("stack is NULL");
+    }
+}

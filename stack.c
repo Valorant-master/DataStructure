@@ -1,69 +1,52 @@
 #include<stdio.h>
-#include<stdbool.h>
-#define MAX 100
-typedef struct {
-    int data[MAX];
+#include<stdlib.h>
+#define Max 10
+typedef struct Stack{
+    int data[Max];
     int top;
 }Stack;
-void initStack(Stack *s){
-    s->top=-1;
+
+Stack* Inint(){
+    Stack* ST=(Stack*)malloc(sizeof(Stack));
+    ST->top=-1;
+    return ST;
 }
-void push(Stack* s,int x){
-    if(s->top==MAX-1){
-        printf("Stack overflow\n");
-        return;    
+void Push(int x,Stack** S){
+    if((*S)->top==Max-1){
+        printf("full");
+        return ;
     }
-    s->top++;
-    s->data[s->top]=x;
+    (*S)->top++;
+    (*S)->data[(*S)->top]=x;
 }
-int pop(Stack* s){
-    if(s->top==-1){
-        printf("No elements to pop\n");
+int Pop(Stack** S){
+    if((*S)->top==-1){
+        printf("Stack is empty");
         return -1;
     }
-    int t=s->data[s->top];
-    s->top--;
+    int t=(*S)->data[(*S)->top];
+    (*S)->top--;
     return t;
 }
-int top(Stack* s){
-    if(s->top==-1){
-        printf("Stack is empty\n");
+
+int Peek(Stack** S){
+    if((*S)->top==-1){
+        printf("Stack is empty");
         return -1;
     }
-    return s->data[s->top];
-}
-bool isEmpty(Stack* s){
-    if(s->top==-1){
-        return true;
-    }else{
-        return false;
-    }
-
-}
-void display(Stack* s){
-    if(s->top==-1){
-        printf("Stack is empty\n");
-        return;
-    }
-    for(int i=s->top;i>=0;i--){
-        printf("%d ",s->data[i]);
-    }
-    printf("\n");
+    return (*S)->data[(*S)->top];
 }
 int main(){
-    Stack s;
-    initStack(&s);
-    push(&s,10);
-    push(&s,9);
-    push(&s,8);
-    push(&s,7);
-    push(&s,6);
-    push(&s,5);
-    pop(&s);
-    display(&s);
-    if(isEmpty(&s)){
-        printf("Stack is empty\n");
-    }
-    printf("Top element is %d\n",top(&s));
-    return 0;
+    Stack* ST=Inint();
+    Stack** S=&ST;
+    Push(1,S);
+    Push(9,S);
+    Push(6,S);
+    Push(5,S);
+    Push(8,S);
+    Pop(S);
+    Pop(S);
+    //Pop(S);
+
+    printf("%d\n",Peek(S));
 }
